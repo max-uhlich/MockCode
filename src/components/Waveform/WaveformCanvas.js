@@ -41,17 +41,21 @@ class WaveformCanvas extends React.Component {
     this.fps = 30;
     this.then = Date.now();
     this.interval = 1000 / this.fps;
-    requestAnimationFrame(() => {
+    this._frameId = requestAnimationFrame(() => {
       this.renderFrame();
     });
   }
 
+  componentWillUnmount() {
+    console.log("UNMOUNTING FRAMEID: " + this._frameId)
+    cancelAnimationFrame(this._frameId);
+  }
+
   handleCanvas = (canvas) => {
-    console.log("render")
-    requestAnimationFrame(() => {
+    console.log("render " + this.frameId)
+    this._frameId = requestAnimationFrame(() => {
       this.renderFrame();
     });
-
   }
 
   ecgGenerator(x) {
@@ -126,6 +130,7 @@ class WaveformCanvas extends React.Component {
 
       const stepsize = 5;
 
+      // Unreachable code...
       if (this.state.dimensions && 0) {
         var frame = this.r.getFrame(this.then, delta);
 
@@ -179,7 +184,7 @@ class WaveformCanvas extends React.Component {
         }
       }
     }
-    requestAnimationFrame(this.renderFrame);
+    this._frameId = requestAnimationFrame(this.renderFrame);
   }
   onLayout = event => {
     let { width, height } = event.nativeEvent.layout
@@ -201,7 +206,7 @@ class WaveformCanvas extends React.Component {
         strokeWidth="3"/>
         <Polyline points={this.state.back}
         fill="none"
-        stroke=this.props.colour
+        stroke={this.props.colour}
         strokeWidth="3" />
         {/* <Rect r="4" cx={this.x} cy={this.y} fill="#1c2321"/> */}
         <Rect x={this.x -5} width="10" height={this.state.dimensions.height} fill="#1c2321"/>

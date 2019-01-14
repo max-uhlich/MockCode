@@ -57,6 +57,7 @@ class MonitorScreen extends React.Component {
 
     render() {
         let CurrentMonitor = MONITOR_PRESETS[this.state.currentPreset];
+        console.log("BLOOD PRESSURE: " + this.props.bloodPressure);
         return (
             <View 
                 style={{flex: 1, flexDirection: 'row'}}

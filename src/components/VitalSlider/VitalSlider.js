@@ -6,7 +6,7 @@ import { Update_Value, ACTIONS } from '../../redux/actions/nearbyActions';
 import WaveFormCollapsible from './WaveFormCollapsible';
 import WaveFormSelector from './WaveFormSelector';
 import Slider from "react-native-slider"
-import {WAVE_FORMS, NSR_VALUES} from '../../utils/constants';
+import {WAVE_FORMS, NSR_VALUES, BLOOD_PRESSURE_LEVELS} from '../../utils/constants';
 
 export class VitalSlider extends Component {
   constructor(props) {
@@ -77,8 +77,10 @@ export class VitalSlider extends Component {
         }
 
         if(this.props.sliderName.indexOf("Blood Pressure") !== -1){
+          console.log("BLOOD PRESSURE STATE " + BLOOD_PRESSURE_LEVELS[NSR_VALUES.BP])
+          console.log("BLOOD PRESSURE SLIDER STATE " + NSR_VALUES.BP)
           this.setState({sliderValue: NSR_VALUES.BP});
-          store.dispatch(Update_Value(ACTIONS.UPDATE_BLOOD_PRESSURE, NSR_VALUES.BP));
+          store.dispatch(Update_Value(ACTIONS.UPDATE_BLOOD_PRESSURE, BLOOD_PRESSURE_LEVELS[NSR_VALUES.BP]));
         }
 
         if(this.props.sliderName.indexOf("EtCO2") !== -1){
