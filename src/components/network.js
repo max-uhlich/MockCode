@@ -65,9 +65,10 @@ export class NetworkComp extends React.Component {
         let nearbyApi = store.getState().NearbyApi.nearbyApi;
         let message = {
             type: "DEVICE_ONLINE",
-            message: DeviceInfo.getDeviceName(),
+            message: DeviceInfo.getDeviceName().replace("*", "") + "*" + DeviceInfo.getUniqueID(),
             timeStamp: new Date()
         }
+        //console.log("Ignore PUBLISH: " + message.type + " " + message.message)
         nearbyApi.publish(JSON.stringify(message));
     }
 
@@ -96,9 +97,10 @@ export class NetworkComp extends React.Component {
             nearbyApi.onSubscribeSuccess(() => {
                 let m = {
                     type:ACTIONS.HELLO_REQUEST,
-                    message: DeviceInfo.getDeviceName(),
+                    message: DeviceInfo.getDeviceName().replace("*", "") + "*" + DeviceInfo.getUniqueID(),
                     timeStamp: new Date()
                 }
+                //console.log("Ignore PUBLISH: " + m.type + " " + m.message)
                 nearbyApi.publish(JSON.stringify(m));
             });
 

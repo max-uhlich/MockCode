@@ -40,7 +40,7 @@ export default class PeerListElement extends React.PureComponent {
         const item = this.props.item;
         return (
         <View style={styles.listElement}>
-            <Text style={styles.connectionName}>{item.id}</Text>
+            <Text style={styles.connectionName}>{(item.id+"").split('*')[0]}</Text>
             <Image
                 source={require('../img/wifi.png')}
                 style={styles.connectionType}

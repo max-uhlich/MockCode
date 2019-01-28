@@ -2,7 +2,7 @@ import React from 'react';
 import {View, FlatList, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import PeerListElement from './PeerListElement';
-import { Update_Value, ACTIONS } from '../../redux/actions/nearbyActions';
+import { Update_Store, ACTIONS } from '../../redux/actions/nearbyActions';
 
 export default class PeerList extends React.PureComponent {
   constructor() {
@@ -11,7 +11,7 @@ export default class PeerList extends React.PureComponent {
   }
 
   toggleListeningCallback = (value) => {
-    store.dispatch(Update_Value(ACTIONS.LISTEN_TO, value));
+    store.dispatch(Update_Store(ACTIONS.LISTEN_TO, value));
     this.setState({Listening_To: value});
 
     //console.log("SWITCH JUST CHANGED: " + this.props.item.id);

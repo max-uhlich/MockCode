@@ -9,9 +9,9 @@ const initialState = {
 
 function NearbyApi(state = initialState, action) {
   //console.log("In reducer NearbyApi")
-  state.devices.add('Max Mega')
-  state.devices.add('Test Device')
-  state.devices.add('Coolio')
+  state.devices.add('Test 1*f139d13*52d')
+  state.devices.add('Test Device*xxc9ef')
+  state.devices.add('Testing Device*1zz1c')
   //const iterator1 = state.devices.entries();
 
   //for (let entry of iterator1) {
@@ -40,7 +40,7 @@ function HeartRate(state = 80, action) {
   //console.log("In reducer updating HeartRate")
   switch (action.type) {
     case ACTIONS.UPDATE_HEART_RATE:
-      return action.value
+      return parseInt(action.value)
     default:
       return state
   }
@@ -60,7 +60,7 @@ function O2Sat(state = 96, action) {
   //console.log("In reducer O2Sat")
   switch (action.type) {
     case ACTIONS.UPDATE_O2SAT:
-      return action.value
+      return parseInt(action.value)
     default:
       return state
   }
@@ -81,7 +81,7 @@ function EtC02(state= 25, action) {
   //console.log("In reducer Etc02")
   switch (action.type) {
     case ACTIONS.UPDATE_ETCO2:
-      return action.value
+      return parseInt(action.value)
     default:
       return state
   }
