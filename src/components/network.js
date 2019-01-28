@@ -108,6 +108,7 @@ export class NetworkComp extends React.Component {
 
             nearbyApi.onFound(message => {
                 let m = JSON.parse(message);
+                //console.log("FOUND: " + m.type + " " + m.message);
                 let messageTimeStamp = new Date(m.timeStamp);
                 if (m.type === "DEVICE_ONLINE" ||
                     m.type === "HELLO_REQUEST" ||
@@ -123,6 +124,7 @@ export class NetworkComp extends React.Component {
                     m.type !== "DEVICE_ONLINE")
                 {
                     this.updateTimeStamps(m.type, messageTimeStamp);
+                    //console.log("about to do STORE.DISPATCH")
                     store.dispatch(On_Message_Found(m));
                 }
             });
