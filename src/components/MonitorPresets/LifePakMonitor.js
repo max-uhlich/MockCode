@@ -50,7 +50,8 @@ export default class LikePakMonitor extends React.PureComponent {
                 </View>
 
                 <View style={styles.o2SatWave}>
-                {/* TODO: Place o2sat wave renderer here. */}
+                    <WaveformCanvas wavetype="HR" colour="red" f={this.props.heartRate}/>
+                    {/* TODO: Place o2sat wave renderer here. */}
                 </View>
             </View>
 
