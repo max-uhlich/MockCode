@@ -28,7 +28,7 @@ export default class LikePakMonitor extends React.PureComponent {
                 </View>
 
                 <View style={styles.heartRateWave}>
-                      <WaveformCanvas wavetype="HR" colour="green" f={this.props.heartRate}/>
+                    <WaveformCanvas wavetype="HR" colour="green" fps={30} stepsize={5} f={this.props.heartRate}/>
                 </View>
             </View>
 
@@ -49,9 +49,8 @@ export default class LikePakMonitor extends React.PureComponent {
                     </View>
                 </View>
 
-                <View style={styles.o2SatWave}>
-                    <WaveformCanvas wavetype="HR" colour="red" f={this.props.heartRate}/>
-                    {/* TODO: Place o2sat wave renderer here. */}
+                <View style={styles.o2SatWave}>      
+                    <WaveformCanvas wavetype="O2Sat" colour="#15f4ee" fps={30} stepsize={2} f={this.props.heartRate}/>
                 </View>
             </View>
 

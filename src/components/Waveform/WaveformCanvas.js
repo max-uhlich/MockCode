@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, View} from "react-native";
-import Svg, {Polyline, Rect} from 'react-native-svg';
 import Canvas from 'react-native-canvas';
 
 import { waveformData } from './WaveformData.js';
@@ -34,7 +33,7 @@ class WaveformCanvas extends React.Component {
     this.begin = Date.now();
     this.renderFrame = this.renderFrame.bind(this);
     this.traceWidth = 10;
-    this.stepsize = 5; //stepsize must be smaller than traceWidth otherwise we won't clear everything.
+    //this.stepsize = this.props.stepsize; //stepsize must be smaller than traceWidth otherwise we won't clear everything.
     //this.handleCanvas = this.handleCanvas.bind(this);
     //this.userTest = React.createRef();
 
@@ -52,7 +51,8 @@ class WaveformCanvas extends React.Component {
   componentDidMount() {
     console.log('componentDidMount')
     
-    this.fps = 30;
+    this.stepsize = this.props.stepsize; 
+    this.fps = this.props.fps;
     this.then = Date.now();
     this.interval = 1000 / this.fps;
     this._frameId = requestAnimationFrame(() => {
@@ -122,8 +122,8 @@ class WaveformCanvas extends React.Component {
             //console.log("ppb " + ppb)
             //console.log("fpb " + fpb)
 
-            c = Math.round(ppb);
-            cadence = Math.min(c, w.nPoints);
+            cadence = Math.round(ppb);
+            //cadence = Math.min(c, w.nPoints);
             break
 
           case "Ventricular Tachycardia":
@@ -142,8 +142,31 @@ class WaveformCanvas extends React.Component {
             var w = waveformData.HR.ASYSTOLE;
             cadence = w.nPoints;
         }
+        // Cadence can never go below 28, otherwise we fail to render heart beats.
+        cadence = Math.max(cadence,28)
+        //console.log("cadence: " + cadence)
 
-        var p = w.dataPoints[x % cadence];
+        /*if (cadence>w.nPoints){
+          var xPos = x % cadence
+          if (xPos>w.nPoints)
+            var p = waveformData.NOISE.NORMAL.dataPoints[xPos % waveformData.NOISE.NORMAL.nPoints]
+          else
+            var p = w.dataPoints[xPos];
+
+          var difference = cadence-w.nPoints;
+          var noise = waveformData.NOISE.NORMAL.dataPoints;
+          var extended = 
+          var p = extended[x % cadence];
+        } else
+          var p = w.dataPoints[x % cadence];*/
+
+        // If cadence is really high, we will add noise to the end
+        var xPos = x % cadence
+        if (xPos>w.nPoints)
+          var p = waveformData.NOISE.NORMAL.dataPoints[xPos % waveformData.NOISE.NORMAL.nPoints]
+        else
+          var p = w.dataPoints[xPos];
+
         var scaled =  (w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height
         return scaled.toFixed();
         break;
@@ -156,6 +179,11 @@ class WaveformCanvas extends React.Component {
         }
         break;
       case "O2Sat":
+        var w = waveformData.O2Sat.NORMAL2;
+        var p = w.dataPoints[x % w.nPoints] - 1;
+        var scaled =  ((w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height)/2
+        return scaled.toFixed();
+
         scaled = this.state.dimensions.height - this.state.dimensions.height * (s.O2Sat / 100) + 10
         return scaled;
         break;
