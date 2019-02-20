@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text} from 'react-native';
-import dateFormat from 'dateformat';
+//import dateFormat from 'dateformat';
 import {moderateScale} from '../../utils/scaling';
 
 export default class Clock extends React.Component {
@@ -28,8 +28,7 @@ export default class Clock extends React.Component {
 
     render() {
         return (
-            <Text style={{fontWeight: 'bold', fontSize: moderateScale(33), color: 'white'}}>{dateFormat(this.state.time,
-                "HH:MM:ss")}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: moderateScale(33), color: 'white'}}>{this.state.time}</Text>
         );
     }
 }
