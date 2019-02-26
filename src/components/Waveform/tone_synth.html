@@ -1,0 +1,28 @@
+
+<script src="https://unpkg.com/tone"></script>
+
+<script>
+	//create a synth and connect it to the master output (your speakers)
+	var synth = new Tone.Synth().toMaster()
+
+	//play a middle 'C' for the duration of an 8th note
+	//synth.triggerAttackRelease('C4', '8n')
+	synth.envelope.attack = 0.005;
+	synth.envelope.decay = 0.005;
+	synth.envelope.sustain = 0.15;
+	synth.envelope.release = 0.05;
+
+	function beep(pitch) {
+		//synth.triggerAttackRelease(Tone.Frequency('D5').transpose(transp), '0.15')
+		synth.triggerAttackRelease(pitch, '0.15')
+	}
+</script>
+
+
+<html>
+	<header><title>This is title</title></header>
+	<body>
+	Hello world
+	</body>
+</html>
+	
