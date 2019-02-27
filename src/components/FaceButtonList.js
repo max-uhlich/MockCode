@@ -61,9 +61,10 @@ function _valueListToViews() {
 export default class FaceButtonList extends PureComponent {
   render() {
     return (
-      <ScrollView>
-        { _valueListToViews() }
-      </ScrollView>
+      //<ScrollView>
+      //  { _valueListToViews() }
+      //</ScrollView>
+      _valueListToViews() 
     )
   }
 }
