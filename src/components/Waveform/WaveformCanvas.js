@@ -1,5 +1,5 @@
 import React from "react";
-import {WebView, StyleSheet, View} from "react-native";
+import {Platform, WebView, StyleSheet, View} from "react-native";
 import Canvas from 'react-native-canvas';
 
 import { waveformData } from './WaveformData.js';
@@ -283,7 +283,7 @@ class WaveformCanvas extends React.Component {
 //ref={(c) => {this.canvasRef = c; this.canvasRef.height = this.state.dimensions.height;}} />
 //<Canvas ref={this.handleCanvas}/> 
   render() {
-    console.log('render ')
+    console.log('render ' + Platform.OS)
     var s = store.getState();
     this.waveform = s.Waveform;
     console.log("this.waveform: " + this.waveform)
@@ -296,7 +296,8 @@ class WaveformCanvas extends React.Component {
         <View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout} > 
           <WebView
             ref={this.handleWebView}
-            source={require('./tone_synth.html')}
+            //source={require('./tone_synth.html')}
+            source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
             style={{flex: 1, alignSelf: 'stretch' }}
             javaScriptEnabled={true}
             domStorageEnabled={true}

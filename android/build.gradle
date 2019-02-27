@@ -41,3 +41,16 @@ subprojects {
     }
   }
 }
+
+// Android currently requires the HTML files in React Native to be in the Android Assets
+// https://github.com/facebook/react-native/pull/17304
+//task copyReactNativeHTML(type: Copy) {
+//    from '../../src/components/Waveform/tone_synth.html'
+//    into 'src/main/assets'
+//}
+
+// Note that you may need to add other build variants
+//gradle.projectsEvaluated {
+//    bundleDebugJsAndAssets.dependsOn(copyReactNativeHTML)
+//    bundleReleaseJsAndAssets.dependsOn(copyReactNativeHTML)
+//}
