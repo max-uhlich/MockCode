@@ -85,6 +85,8 @@ class WaveformCanvas extends React.Component {
     console.log('handleWebView')
     if(webview){
       this.webviewRef = webview;
+      //this.webviewRef.injectJavaScript('beep(\'D5\')');
+      //this.webviewRef.injectJavaScript('change_size()');
     }
   }
 
@@ -213,26 +215,31 @@ class WaveformCanvas extends React.Component {
         // Draw a particular line segment of our curve.
         if(this.x===0){
           //this.wintimer = new Date()
-          this.ctx.moveTo(this.x, this.y);
-          this.ctx.fillRect(this.x, this.y, 1, 1);
+          this.webviewRef.injectJavaScript('first_point(\''+this.x+'\',\''+this.y+'\')');
+          //this.ctx.moveTo(this.x, this.y);
+          //this.ctx.fillRect(this.x, this.y, 1, 1);
         } else {
-          this.ctx.lineTo(this.x, this.y);
-          this.ctx.stroke();
+          this.webviewRef.injectJavaScript('draw_line(\''+this.x+'\',\''+this.y+'\')');
+          //this.ctx.lineTo(this.x, this.y);
+          //this.ctx.stroke();
         }
 
         // Draw the trace.
-        this.ctx.clearRect(this.x+1, 0, this.traceWidth, this.state.dimensions.height);
+        this.webviewRef.injectJavaScript('trace(\''+(this.x+1)+'\',\''+this.traceWidth+'\')');
+        //this.ctx.clearRect(this.x+1, 0, this.traceWidth, this.state.dimensions.height);
         var overage = (this.x+1) + (this.traceWidth-1) - this.state.dimensions.width;
         //console.log("overage: " + overage)
-        if (overage > 0)
-          this.ctx.clearRect(0, 0, overage, this.state.dimensions.height);
+        if (overage > 0){
+          this.webviewRef.injectJavaScript('trace(\''+0+'\',\''+overage+'\')');
+          //this.ctx.clearRect(0, 0, overage, this.state.dimensions.height);
+        }
         
         this.x = (this.x % (this.state.dimensions.width+1)) + this.stepsize
 
         if(this.x >= (this.state.dimensions.width+1)){
           //console.log("path: " + this.path)
-          //this.ctx.clearRect(0, 0, this.state.dimensions.width, this.state.dimensions.height);
-          this.ctx.beginPath();
+          this.webviewRef.injectJavaScript('reset()');
+          //this.ctx.beginPath();
           //this.path = ""
           this.x = 0
           //this.wintimer2 = new Date()
@@ -281,6 +288,7 @@ class WaveformCanvas extends React.Component {
   }
 
 //ref={(c) => {this.canvasRef = c; this.canvasRef.height = this.state.dimensions.height;}} />
+//<View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout} > 
 //<Canvas ref={this.handleCanvas}/> 
   render() {
     console.log('render ' + Platform.OS)
@@ -293,17 +301,14 @@ class WaveformCanvas extends React.Component {
     if (this.state.dimensions) {
       //console.log("this.state.dimensions: " + this.state.dimensions.height + " " + this.state.dimensions.width)
       return (
-        <View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout} > 
           <WebView
             ref={this.handleWebView}
-            //source={require('./tone_synth.html')}
-            source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
-            style={{flex: 1, alignSelf: 'stretch' }}
+            source={require('./tone_synth.html')}
+            //source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
             javaScriptEnabled={true}
             domStorageEnabled={true}
+            injectedJavaScript={'init(\''+this.state.dimensions.width+'\',\''+this.state.dimensions.height+'\',\''+this.props.colour+'\');'}
           />
-          <Canvas ref={this.handleCanvas}/> 
-        </View>
       );
     } else {
       return (<View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout}/>);
