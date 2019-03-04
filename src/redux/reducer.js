@@ -1,62 +1,53 @@
-import { ACTIONS } from "../actions/nearbyActions"
+import { ACTIONS } from "./actions/nearbyActions"
 import { combineReducers } from 'redux'
 import { NearbyAPI } from "react-native-nearby-api";
 
-const ControllerValues = {
-  HEART_RATE: "HEART_RATE"
-}
-
 const initialState = {
     nearbyApi: new NearbyAPI(true),
-    devices: new Set(),
-    controllerValues : [{
-        controllerValueType: ControllerValues.HEART_RATE,
-        value: 0
-    },{
-      controllerValueType: ControllerValues.BLOOD_PRESSURE,
-      value: 0
-    },{
-      controllerValueType: ControllerValues.O2Sat,
-      value: 0
-    },{
-      controllerValueType: ControllerValues.EtC02,
-      value: 0
-    },{
-      controllerValueType: ControllerValues.Waveform,
-      value: 0
-    }]
+    devices: new Set()
 }
 
-
-
 function NearbyApi(state = initialState, action) {
+  //console.log("In reducer NearbyApi")
+  state.devices.add('Test 1*f139d13*52d')
+  state.devices.add('Test Device*xxc9ef')
+  state.devices.add('Testing Device*1zz1c')
+  //const iterator1 = state.devices.entries();
+
+  //for (let entry of iterator1) {
+  //  console.log(entry);
+  //}
+
   switch (action.type) {
-  case ACTIONS.MESSAGE_FOUND:
-    return state;
-  case ACTIONS.HELLO_RESPONSE:
-    state.devices.add(action.value);
-    return state
-  default:
-    return state
+    case ACTIONS.HELLO_RESPONSE:
+      return {
+        ...state,
+        devices: new Set(state.devices.add(action.value))
+      }
+    case ACTIONS.REMOVE_DEVICE:
+      let newDevices = state.devices;
+      newDevices.delete(action.value);
+      return {
+        ...state,
+        devices: new Set(newDevices)
+      }
+    default:
+      return state
   }
 }
 
 function HeartRate(state = 80, action) {
+  //console.log("In reducer updating HeartRate")
   switch (action.type) {
     case ACTIONS.UPDATE_HEART_RATE:
-      return action.value
-    // case ACTIONS.UPDATE_WAVEFORM:
-    //   if (action.value == "Compressions In-Progress") {
-    //     return "--";
-    //   } else {
-    //     return 0;
-    //   }
+      return parseInt(action.value)
     default:
       return state
   }
 }
 
 function bloodPressure(state = '120/78', action) {
+  //console.log("In reducer bloodPressure")
   switch (action.type) {
     case ACTIONS.UPDATE_BLOOD_PRESSURE:
       return action.value
@@ -66,9 +57,10 @@ function bloodPressure(state = '120/78', action) {
 }
 
 function O2Sat(state = 96, action) {
+  //console.log("In reducer O2Sat")
   switch (action.type) {
     case ACTIONS.UPDATE_O2SAT:
-      return action.value
+      return parseInt(action.value)
     default:
       return state
   }
@@ -76,6 +68,7 @@ function O2Sat(state = 96, action) {
 
 //Ideally this action just changes the source state for the image, not sure how the formatting should go
 function face(state = 'normal', action) {
+  //console.log("In reducer Face")
   switch (action.type) {
     case ACTIONS.UPDATE_FACE:
       return action.value
@@ -85,17 +78,29 @@ function face(state = 'normal', action) {
 }
 
 function EtC02(state= 25, action) {
+  //console.log("In reducer Etc02")
   switch (action.type) {
     case ACTIONS.UPDATE_ETCO2:
-      return action.value
+      return parseInt(action.value)
     default:
       return state
   }
 }
 
 function Waveform(state = 'Normal Sinus Rhythm', action) {
+  //console.log("In reducer Waveform")
   switch (action.type) {
     case ACTIONS.UPDATE_WAVEFORM:
+      return action.value
+    default:
+      return state
+  }
+}
+
+function Listening_To(state = null, action) {
+  //console.log("In reducer updating Listen")
+  switch (action.type) {
+    case ACTIONS.LISTEN_TO:
       return action.value
     default:
       return state
@@ -110,6 +115,7 @@ const MockApp = combineReducers({
     EtC02,
     Waveform,
     face,
+    Listening_To,
 });
 
 export default MockApp;

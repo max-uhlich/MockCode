@@ -1,49 +1,159 @@
-import React, { Component } from 'react'
-import {Platform} from 'react-native'
+import React from 'react'
+import {Platform, AppState, Alert, NetInfo} from 'react-native'
 import {API_KEYS} from '../api'
-import {On_Message_Found, ACTIONS} from '../redux/actions/nearbyActions'
+import {On_Message_Found, ACTIONS, Update_Store} from '../redux/actions/nearbyActions'
 import DeviceInfo from 'react-native-device-info'
 
-
-export class NetworkComp extends Component {
-  componentDidMount() {
-    state = store.getState()
-    var nearbyApi = state.NearbyApi.nearbyApi;
-    if (nearbyApi != undefined) {
-
-      if (Platform.OS != 'Jest') {
-        nearbyApi.connect(API_KEYS.nearby)
-      }
-  
-      nearbyApi.onConnected(message => {
-        //TODO: dispatch successful connect action
-        console.log("Connected to Nearby.");
-        nearbyApi.subscribe();
-      });
-  
-      nearbyApi.onSubscribeSuccess(() => {
-        let m = {type:ACTIONS.HELLO_REQUEST, message: DeviceInfo.getDeviceName()}
-        nearbyApi.publish(JSON.stringify(m));
-        // console.log(m)
-      })
-      nearbyApi.onPublishSuccess(message => {
-        // console.log(message, "psucess");
-      });
-      nearbyApi.onFound(message => {
-        // console.log(message);
-        store.dispatch(On_Message_Found(message));
-      });
+export class NetworkComp extends React.Component {
+    constructor(){
+        super();
+        let actionTimeStamps = {}
+        Object.keys(ACTIONS).forEach(function(key) {
+            actionTimeStamps[key]= new Date(0);
+        });
+        this.state = {
+            appState: AppState.currentState,
+            lastReceivPayload: actionTimeStamps,
+            deviceOnlineTimeStamps: {},
+            sendOnlineIntervalId: null,
+            checkOnlineIntervalId: null
+        }
+        this.checkOnlineDevices = this.checkOnlineDevices.bind(this);
     }
-  };
-  
-  componentWillUnmount() {
-    console.log("network is about to be destroyed");
-    // TODO: unsubscribe and disconnect
-  };
 
-  render() {
-    return (
-      null
-    )
-  }
+    handleAppStateChange = (nextAppState) => {
+        let nearbyApi = store.getState().NearbyApi.nearbyApi;
+        if(this.state.appState.match(/active/)
+            && (nextAppState === 'inactive'|| nextAppState === 'background')) {
+            nearbyApi.unpublish();
+            nearbyApi.unsubscribe();
+        } else {
+            nearbyApi.subscribe();
+        }
+    }
+
+    handleNetworkChange = (connectionInfo) => {
+        if(connectionInfo.type === "none"){
+            Alert.alert("No Internet Connection",
+                "Please reconnect to a network in order to communicate " +
+                "with other devices.",
+                [{text: 'Cancel'},
+                {text: 'OK'}
+                ],
+                {cancelable: false}
+            )
+        }
+    }
+
+    checkOnlineDevices(){
+        let currentTime = new Date();
+        let deviceTimeStamps = Object.assign({}, this.state.deviceOnlineTimeStamps);
+        Object.keys(deviceTimeStamps).forEach(
+            function(key) {
+                let diff = currentTime.getTime() - deviceTimeStamps[key].getTime();
+                let secondsBetweenDates = Math.abs(diff / 1000);
+                if(secondsBetweenDates > 90.0){
+                    delete deviceTimeStamps[key];
+                    store.dispatch(Update_Store(ACTIONS.REMOVE_DEVICE, key));
+                }
+            }
+        );
+        this.setState({deviceOnlineTimeStamps: deviceTimeStamps});
+    }
+
+    sendDeviceOnlineUpdate() {
+        let nearbyApi = store.getState().NearbyApi.nearbyApi;
+        let message = {
+            type: "DEVICE_ONLINE",
+            message: DeviceInfo.getDeviceName().replace("*", "") + "*" + DeviceInfo.getUniqueID(),
+            timeStamp: new Date()
+        }
+        //console.log("Ignore PUBLISH: " + message.type + " " + message.message)
+        nearbyApi.publish(JSON.stringify(message));
+    }
+
+    updateTimeStamps = (type, timeStamp) => {
+        let temp = Object.assign({}, this.state.lastReceivPayload);
+        temp[type]= timeStamp;
+        this.setState({
+            lastReceivPayload: temp
+        });
+    }
+
+    componentDidMount() {
+        state = store.getState()
+        var nearbyApi = state.NearbyApi.nearbyApi;
+        if (nearbyApi != undefined) {
+
+            if (Platform.OS != 'Jest') {
+                nearbyApi.connect(API_KEYS.nearby)
+            }
+
+            nearbyApi.onConnected(message => {
+                // console.log("Connected to Nearby.");
+                nearbyApi.subscribe();
+            });
+
+            nearbyApi.onSubscribeSuccess(() => {
+                let m = {
+                    type:ACTIONS.HELLO_REQUEST,
+                    message: DeviceInfo.getDeviceName().replace("*", "") + "*" + DeviceInfo.getUniqueID(),
+                    timeStamp: new Date()
+                }
+                //console.log("Ignore PUBLISH: " + m.type + " " + m.message)
+                nearbyApi.publish(JSON.stringify(m));
+            });
+
+            nearbyApi.onPublishSuccess(message => {
+                // console.log(message, "psucess");
+            });
+
+            nearbyApi.onFound(message => {
+                let m = JSON.parse(message);
+                //console.log("FOUND: " + m.type + " " + m.message);
+                let messageTimeStamp = new Date(m.timeStamp);
+                if (m.type === "DEVICE_ONLINE" ||
+                    m.type === "HELLO_REQUEST" ||
+                    m.type === "HELLO_RESPONSE")
+                {
+                    let temp = Object.assign({}, this.state.deviceOnlineTimeStamps);
+                    temp[m.message] = new Date();
+                    this.setState({
+                        deviceOnlineTimeStamps: temp
+                    });
+                }
+                if (messageTimeStamp > this.state.lastReceivPayload[m.type] &&
+                    m.type !== "DEVICE_ONLINE")
+                {
+                    this.updateTimeStamps(m.type, messageTimeStamp);
+                    //console.log("about to do STORE.DISPATCH")
+                    store.dispatch(On_Message_Found(m));
+                }
+            });
+        }
+
+        AppState.addEventListener('change', this.handleAppStateChange);
+        NetInfo.addEventListener('connectionChange', this.handleNetworkChange);
+        let sendOnlineIntervalId = setInterval(this.sendDeviceOnlineUpdate, 1000*45);
+        let checkOnlineIntervalId = setInterval(this.checkOnlineDevices, 1000*135);
+        this.setState({sendOnlineIntervalId: sendOnlineIntervalId});
+        this.setState({checkOnlineIntervalId: checkOnlineIntervalId});
+
+    };
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange);
+        NetInfo.removeEventListener('connectionChange', this.handleNetworkChange);
+        clearInterval(this.state.sendOnlineIntervalId);
+        clearInterval(this.state.checkOnlineIntervalId);
+        nearbyApi.unpublish();
+        nearbyApi.unsubscribe();
+        nearbyApi.disconnect();
+    };
+
+    render() {
+        return (
+            null
+        )
+    }
 }

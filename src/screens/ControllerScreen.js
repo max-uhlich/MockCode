@@ -5,7 +5,6 @@ import { VitalSlider } from "../components/VitalSlider";
 import styles from "./styles/controllerScreenStyle"
 
 import {Update_Value, ACTIONS} from '../redux/actions/nearbyActions'
-import { NetworkComp } from '../components/network';
 import FaceButtonList from '../components/FaceButtonList';
 import { moderateScale } from "../utils/scaling";
 import {BLOOD_PRESSURE_LEVELS, WAVE_FORMS} from '../utils/constants';
@@ -18,7 +17,8 @@ export default class ControllerScreen extends Component {
   }
 
   static navigationOptions = {
-    title: "Controller"
+    title: "Controller",
+    header: null
   };
 
   waveformCallback = (value) => {
@@ -57,7 +57,6 @@ export default class ControllerScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <NetworkComp/>
         <View>
         {this._renderCompressionsInProgress()}
         </View>

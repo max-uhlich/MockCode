@@ -1,8 +1,8 @@
 import React, { Component} from 'react';
 import {Provider} from "react-redux";
-import { createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk'
-import MockApp from './redux/reducers/nearbyReducer'
+import MockApp from './redux/reducer'
 import {API_KEYS} from './api'
 import RootNavigator from './navigation'
 import {Root} from 'native-base'
@@ -15,12 +15,12 @@ const {height, width} = Dimensions.get('window')
 store = createStore(MockApp, applyMiddleware(thunkMiddleware))
 
 export default class App extends Component {
-  constructor() {
-    super();
-  }
+  //constructor() {
+  //  super();
+  //}
   
   render() {
-    console.log(width);
+    //console.log(width);
     return (
       <Provider store={store}>
         <Root>
