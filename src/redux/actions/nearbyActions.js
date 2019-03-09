@@ -7,6 +7,7 @@ export const ACTIONS = {
 	  UPDATE_ETCO2: "UPDATE_ETCO2",
 		UPDATE_WAVEFORM: "UPDATE_WAVEFORM",
 		UPDATE_FACE: "UPDATE_FACE",
+		UPDATE_SWITCHVALS: "UPDATE_SWITCHVALS",
 		HELLO_RESPONSE: "HELLO_RESPONSE",
 		HELLO_REQUEST: "HELLO_REQUEST",
 		REMOVE_DEVICE: "REMOVE_DEVICE",
@@ -30,7 +31,7 @@ export function Update_Value(type, value) {
 			// This is the only place where we publish a value change that another device needs to listen to
 			// We will need to include our device name+ID here.
 			//console.log("Listening_To: " + getState().Listening_To)
-			//console.log("Value PUBLISH: " + m.type + " " + m.message)
+			console.log("Value PUBLISH: " + m.type + " " + (m.message+"").split('*')[0])
 			getState().NearbyApi.nearbyApi.publish(JSON.stringify(m))
 			return dispatch(Update_Store(type, value));
 		}
@@ -59,15 +60,16 @@ export function On_Message_Found(m) {
 				var listen_ID = getState().Listening_To.split('*').slice(1).join('')
 				var incoming_ID = (m.message+"").split('*').slice(1).join('')
 				if (listen_ID === incoming_ID) {
-					console.log("Listening To: " + getState().Listening_To + " listenID: " + listen_ID)
-					console.log("m.message: " + m.message + " incoming_ID: " + incoming_ID)
-					console.log("Updating Store Value " + m.type + " " + (m.message+"").split('*')[0])
+					//console.log("Listening To: " + getState().Listening_To + " listenID: " + listen_ID)
+					//console.log("m.message: " + m.message + " incoming_ID: " + incoming_ID)
+					console.log("m.message: " + (m.message+"").split('*')[0] + " m.type: " + m.type)
+					//console.log("Updating Store Value " + m.type + " " + (m.message+"").split('*')[0])
 					return dispatch(Update_Store(m.type, (m.message+"").split('*')[0]))
 				} else {
-					console.log("ignoring mismatched IDs " + listen_ID + " " + incoming_ID)
+					//console.log("ignoring mismatched IDs " + listen_ID + " " + incoming_ID)
 				}
 			} else {
-				console.log("ignoring listening to null " + m.type + " " + m.message)
+				//console.log("ignoring listening to null " + m.type + " " + m.message)
 			}
 		}
 	}

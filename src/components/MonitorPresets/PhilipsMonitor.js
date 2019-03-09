@@ -7,6 +7,9 @@ import WaveformCanvas from '../Waveform/WaveformCanvas';
 
 export default class PhilipsMonitor extends React.PureComponent{
     render() {
+        var HR = (this.props.SwitchVals.charAt(0)==='1') ? this.props.heartRate : '---';
+        var O2 = (this.props.SwitchVals.charAt(1)==='1') ? this.props.O2Sat : '---';
+        var BP = (this.props.SwitchVals.charAt(2)==='1') ? this.props.bloodPressure : '---';
         return (
             <View style={styles.container}>
                 {/* This view contains the column where any waveforms are drawn
@@ -32,7 +35,7 @@ export default class PhilipsMonitor extends React.PureComponent{
                                 <Text style={{fontSize:moderateScale(20), color: '#EBB0D7'}}>Pulse</Text>
                                 <Text style={{marginRight: '20%'}}>Man</Text>
                             </View> */}
-                            <Text style={bpInfoStyle.nbpValueLarge}>{this.props.bloodPressure}</Text>
+                            <Text style={bpInfoStyle.nbpValueLarge}>{BP}</Text>
                         </View>
                         <View style={{flex : 1.5, alignItems: 'center'}}>
                             <Text style={bpInfoStyle.nbpRightText}>NBP</Text>
@@ -46,19 +49,23 @@ export default class PhilipsMonitor extends React.PureComponent{
                     <View style={styles.heartRateData}>
                         <VitalsInfo 
                             vitalSignName="HR"
-                            vitalRate={this.props.heartRate}
+                            vitalRate={HR}
                             style={{color: '#80ff80'}}
+                            numer={120}
+                            denom={50}
                         />
                     </View>
                     <View style={styles.oSatData}>
                         <VitalsInfo 
                             vitalSignName="SpO2" 
-                            vitalRate={this.props.O2Sat} 
+                            vitalRate={O2} 
                             style={{color: '#15f4ee'}}
+                            numer={100}
+                            denom={90}
                         />
                     </View>
                     <View style={styles.nbpInfoExtra}>
-                        <Text style={bpInfoStyle.nbpInfoExtraText}>{this.props.bloodPressure}</Text>
+                        <Text style={bpInfoStyle.nbpInfoExtraText}>{BP}</Text>
                     </View>
                 </View>
                 {/* View to contain the right side of monitor, where the pulse of
@@ -71,7 +78,7 @@ export default class PhilipsMonitor extends React.PureComponent{
                                 <View style={pulseStyle.squareGraphic}>
                                 </View>
                             </View>
-                            <Text style={pulseStyle.pulseValue}>{this.props.O2Sat}</Text>
+                            <Text style={pulseStyle.pulseValue}>{O2}</Text>
                         </View>
                     </View>
                     <View style={{flex: 1, backgroundColor: 'black'}}>
@@ -85,7 +92,8 @@ export default class PhilipsMonitor extends React.PureComponent{
 PhilipsMonitor.propTypes = {
     heartRate: PropTypes.number.isRequired,
     bloodPressure: PropTypes.string.isRequired,
-    O2Sat: PropTypes.number.isRequired
+    O2Sat: PropTypes.number.isRequired,
+    SwitchVals: PropTypes.string.isRequired
 }
 
 const bpInfoStyle = StyleSheet.create({

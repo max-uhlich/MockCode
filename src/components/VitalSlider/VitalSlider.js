@@ -13,9 +13,24 @@ export class VitalSlider extends Component {
     super(props);
     this._onSliderChange = this._onSliderChange.bind(this);
     this._onWaveformChange = this._onWaveformChange.bind(this);
+
+    if(this.props.sliderName.indexOf("Heart Rate") !== -1)
+      this.position = 0;
+    else if(this.props.sliderName.indexOf("O2 Saturation") !== -1)
+      this.position = 1;
+    else if(this.props.sliderName.indexOf("Blood Pressure") !== -1)
+      this.position = 2;
+    else if(this.props.sliderName.indexOf("EtCO2") !== -1)
+      this.position = 3;
+
+    //console.log("this.props.sliderName: " + this.props.sliderName)
+    //console.log("this.position: " + this.position)
+    //console.log("props.switchVals: " + props.switchVals)
+    //console.log("(props.switchVals.charAt(this.position)==='1'): " + (props.switchVals.charAt(this.position)==='1'))
+
     this.state = {
       sliderValue: props.initialValue,
-      switchValue: true,
+      switchValue: (props.switchVal==='1'),
       collapsed: true,
       waveform: props.waveform
     };
@@ -34,11 +49,41 @@ export class VitalSlider extends Component {
   }
 
   _onSliderChange = (value) => {
-    this.setState({sliderValue: value});
+    this.setState({sliderValue: parseInt(value)});
   };
 
   _onSwitchChange = (value) => {
     this.setState({switchValue: value});
+
+    this.props.switchCallback(this.position+(value?'1':'0'))
+
+    //store.dispatch(Update_Value(ACTIONS.TOGGLE_SWITCHVALS, this.position));
+
+    //console.log("this.state.switchVals: " + this.props.switchVals)
+    //console.log("this.state.switchVals.slice(0, this.position): " + this.props.switchVals.slice(0, this.position))
+    //console.log("this.state.switchVals.slice(this.position): " + this.props.switchVals.slice(this.position+1))
+
+    //let pre = this.props.switchVals.slice(0, this.position)
+    //let post = this.props.switchVals.slice(this.position+1)
+
+    //if (value)
+    //  store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, pre+'1'+post));
+    //else
+    //  store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, pre+'0'+post));
+
+    /*if (!value){
+      //this switch has been disabled, therefore we need to send ---
+      if(this.props.actionType === ACTIONS.UPDATE_BLOOD_PRESSURE)
+        store.dispatch(Update_Value(this.props.actionType, '-1'));    
+    } else {
+      //otherwise we need to go back to whatever value was here before.
+      if(this.props.actionType === ACTIONS.UPDATE_BLOOD_PRESSURE){
+        store.dispatch(Update_Value(this.props.actionType, this.props.bpLevels[this.state.sliderValue]));      
+      } else{
+        store.dispatch(Update_Value(this.props.actionType, this.state.sliderValue));
+      }
+    }*/
+
   }
 
   _onSlidingComplete = (value) => {
@@ -77,8 +122,8 @@ export class VitalSlider extends Component {
         }
 
         if(this.props.sliderName.indexOf("Blood Pressure") !== -1){
-          console.log("BLOOD PRESSURE STATE " + BLOOD_PRESSURE_LEVELS[NSR_VALUES.BP])
-          console.log("BLOOD PRESSURE SLIDER STATE " + NSR_VALUES.BP)
+          //console.log("BLOOD PRESSURE STATE " + BLOOD_PRESSURE_LEVELS[NSR_VALUES.BP])
+          //console.log("BLOOD PRESSURE SLIDER STATE " + NSR_VALUES.BP)
           this.setState({sliderValue: NSR_VALUES.BP});
           store.dispatch(Update_Value(ACTIONS.UPDATE_BLOOD_PRESSURE, BLOOD_PRESSURE_LEVELS[NSR_VALUES.BP]));
         }
@@ -90,14 +135,17 @@ export class VitalSlider extends Component {
         break;
       case WAVE_FORMS.VTC: // Ventricular Tachycardia
         if(this.props.sliderName.indexOf("Heart Rate") !== -1){
-          this.setState({sliderValue: 184, switchValue: false});
+          this.setState({sliderValue: 184, switchValue: true});
+          this.props.switchCallback(this.position+'1')
           store.dispatch(Update_Value(this.props.actionType, 184));
-        } else {
-          this.setState({switchValue: true});
         }
         break;
       case WAVE_FORMS.VTF: // Ventricular Fibrillation
+        this.setState({switchValue: false});
+        break;
       case WAVE_FORMS.PEA: // PEA/Asystole
+        this.setState({switchValue: false});
+        break;
       case WAVE_FORMS.CIP: // Compressions In-Progress
         this.setState({switchValue: false});
         break;
@@ -109,7 +157,23 @@ export class VitalSlider extends Component {
 
   _renderSliderValue() {
     let sliderValue = ""
-    if(this.state.waveform === WAVE_FORMS.NSR || this.state.waveform === WAVE_FORMS.VTC){
+    if(this.state.switchValue){
+      if(this.props.sliderName.indexOf("Blood Pressure") !== -1){
+        sliderValue = this.props.bpLevels[this.state.sliderValue];
+      } else {
+        sliderValue = this.state.sliderValue;
+      }
+    } else {
+      sliderValue = "---";
+    }
+
+    return(
+      <Text style={style.sliderValueText}> {sliderValue} </Text>
+    )
+
+
+    /*let sliderValue = ""
+    if((this.state.waveform === WAVE_FORMS.NSR || this.state.waveform === WAVE_FORMS.VTC) && this.state.switchValue){
       if(this.props.sliderName.indexOf("Blood Pressure") !== -1){
         sliderValue = this.props.bpLevels[this.state.sliderValue];
       } else {
@@ -122,7 +186,7 @@ export class VitalSlider extends Component {
 
     return(
       <Text style={style.sliderValueText}> {sliderValue} </Text>
-    )
+    )*/
   }
 
   _renderWaveformSelector() {
@@ -148,6 +212,7 @@ export class VitalSlider extends Component {
   }
 
   render() {
+    //console.log('rendering ControllerScreen');
     return (
       <View style={style.sliderContainer}>
         <View style={style.titleValueSwitch}>
@@ -190,6 +255,7 @@ VitalSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   initialValue: PropTypes.number.isRequired,
+  switchVal: PropTypes.string.isRequired,
   waveform: PropTypes.string.isRequired,
   step: PropTypes.number,
   bpLevels: PropTypes.arrayOf(PropTypes.string)

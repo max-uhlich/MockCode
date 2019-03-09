@@ -6,7 +6,8 @@ import {
   StatusBar,
   Alert,
   Platform,
-  Dimensions
+  Dimensions,
+  YellowBox
 } from 'react-native';
 import { Container, Button, Text, Grid, Row, Col } from 'native-base';
 import PeerList from '../components/PeerList/PeerList';
@@ -32,6 +33,7 @@ class SelectModeScreen extends Component {
 
   componentDidMount(){
     StatusBar.setHidden(false);
+    YellowBox.ignoreWarnings(['Setting a timer']);
   }
 
   static navigationOptions = {

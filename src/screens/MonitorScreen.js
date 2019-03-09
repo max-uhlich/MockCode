@@ -56,16 +56,18 @@ class MonitorScreen extends React.Component {
 
     render() {
         let CurrentMonitor = MONITOR_PRESETS[this.state.currentPreset];
-        console.log("BLOOD PRESSURE: " + this.props.bloodPressure);
+        //console.log("BLOOD PRESSURE: " + this.props.bloodPressure);
         return (
             <View 
                 style={{flex: 1, flexDirection: 'row'}}
                 onResponderRelease={() => this.stopTouch(this.state.toggle)}
                 onStartShouldSetResponder={(e) => {return true}}>
                 <CurrentMonitor
+                    Waveform = {this.props.Waveform}
                     heartRate = {this.props.heartRate}
                     bloodPressure = {this.props.bloodPressure}
-                    O2Sat = {this.props.O2Sat}/>
+                    O2Sat = {this.props.O2Sat}
+                    SwitchVals = {this.props.SwitchVals}/>
                 <PresetChangerArrow
                     show={this.state.toggle}
                     arrow="ios-arrow-back"
@@ -90,7 +92,8 @@ const mapStateToProps = (state) => {
         heartRate: state.HeartRate,
         bloodPressure: state.bloodPressure,
         O2Sat: state.O2Sat,
-        Waveform: state.Waveform
+        Waveform: state.Waveform,
+        SwitchVals: state.SwitchVals
     }
 }
 

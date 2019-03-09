@@ -97,6 +97,31 @@ function Waveform(state = 'Normal Sinus Rhythm', action) {
   }
 }
 
+function SwitchVals(state = '1111', action) {
+
+  switch (action.type) {
+    case ACTIONS.UPDATE_SWITCHVALS:
+      //console.log("updating sitchvals: " + action.value)
+      return action.value
+    default:
+      return state
+  }
+
+  /*switch (action.type) {
+    case ACTIONS.TOGGLE_SWITCHVALS:
+      console.log("updating sitchvals at position: " + action.value)
+
+      let pre = state.slice(0, action.value)
+      let post = state.slice(action.value+1)
+      let val = (state.charAt(action.value)==='1') ? '0' : '1'
+
+      console.log("updating pre+val+post: " + pre+val+post)
+      return pre+val+post
+    default:
+      return state
+  }*/
+}
+
 function Listening_To(state = null, action) {
   //console.log("In reducer updating Listen")
   switch (action.type) {
@@ -116,6 +141,7 @@ const MockApp = combineReducers({
     Waveform,
     face,
     Listening_To,
+    SwitchVals,
 });
 
 export default MockApp;

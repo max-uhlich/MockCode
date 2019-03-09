@@ -10,7 +10,7 @@ import { waveformData } from './WaveformData.js';
 class WaveformCanvas extends React.Component {
   
   constructor() {
-    console.log('constructor')
+    //console.log('constructor')
     super();
     this.state = {
       //x:0,
@@ -50,7 +50,7 @@ class WaveformCanvas extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
+    //console.log('componentDidMount')
     
     this.stepsize = this.props.stepsize; 
     this.fps = this.props.fps;
@@ -64,13 +64,13 @@ class WaveformCanvas extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount')
-    console.log("UNMOUNTING FRAMEID: " + this._frameId)
+    //console.log('componentWillUnmount')
+    //console.log("UNMOUNTING FRAMEID: " + this._frameId)
     cancelAnimationFrame(this._frameId);
   }
 
   handleCanvas = (canvas) => {
-    console.log('handleCanvas')
+    //console.log('handleCanvas')
     if(canvas){
       this.canvasRef = canvas;
       this.canvasRef.height = this.state.dimensions.height;
@@ -82,7 +82,7 @@ class WaveformCanvas extends React.Component {
   }
 
   handleWebView = (webview) => {
-    console.log('handleWebView')
+    //console.log('handleWebView')
     if(webview){
       this.webviewRef = webview;
       //this.webviewRef.injectJavaScript('beep(\'D5\')');
@@ -257,17 +257,17 @@ class WaveformCanvas extends React.Component {
   }
 
   onLayout = event => {
-    console.log('onLayout')
+    //console.log('onLayout')
     let { width, height } = event.nativeEvent.layout
     if (this.state.dimensions) {
       if (width == this.state.dimensions.width && height == this.state.dimensions.height) return;
     }
     this.setState({ dimensions: { width:width, height:height } })
 
-    console.log("width: " + width)
-    console.log("height: " + height)
+    //console.log("width: " + width)
+    //console.log("height: " + height)
     this.threshold = Math.round(0.48913*height)
-    console.log("threshold: " + this.threshold)
+    //console.log("threshold: " + this.threshold)
     
     /*this.fps = 30;
     this.then = Date.now();
@@ -281,22 +281,22 @@ class WaveformCanvas extends React.Component {
 
     //seconds per window
     this.spw = (width/this.stepsize)/this.fps;
-    console.log("seconds per window: " + this.spw)
+    //console.log("seconds per window: " + this.spw)
     var bps = this.heartrate/60                     //beats per second
     var bpw = this.spw*bps                                      //beats per window
-    console.log("bpw: " + bpw + " " + Math.round(bpw))
+    //console.log("bpw: " + bpw + " " + Math.round(bpw))
   }
 
 //ref={(c) => {this.canvasRef = c; this.canvasRef.height = this.state.dimensions.height;}} />
 //<View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout} > 
 //<Canvas ref={this.handleCanvas}/> 
   render() {
-    console.log('render ' + Platform.OS)
+    //console.log('waveform render ' + Platform.OS)
     var s = store.getState();
     this.waveform = s.Waveform;
-    console.log("this.waveform: " + this.waveform)
+    //console.log("this.waveform: " + this.waveform)
     this.heartrate = s.HeartRate;
-    console.log("this.heartrate: " + this.heartrate)
+    //console.log("this.heartrate: " + this.heartrate)
     this.pitch = this.pitches[s.O2Sat % 60]
     if (this.state.dimensions) {
       //console.log("this.state.dimensions: " + this.state.dimensions.height + " " + this.state.dimensions.width)

@@ -10,8 +10,8 @@ export default class VitalInfo extends React.PureComponent {
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
                     <Text style={[this.props.style, {marginBottom: '-5%', fontWeight: 'bold'}]}>{this.props.vitalSignName}</Text>
                     <View style={{alignItems: 'flex-end', marginRight:'70%'}}>
-                        <Text style={this.props.style}>120</Text>
-                        <Text style={[this.props.style, {marginTop: '-15%'}]}>50</Text>
+                        <Text style={this.props.style}>{this.props.numer}</Text>
+                        <Text style={[this.props.style, {marginTop: '-15%'}]}>{this.props.denom}</Text>
                     </View>
                 </View>
             </View>

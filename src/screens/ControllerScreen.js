@@ -14,6 +14,7 @@ export default class ControllerScreen extends Component {
     super();
     this._compressionsChange = this._compressionsChange.bind(this);
     this.state = store.getState();
+    this.switchVals = this.state.SwitchVals;
   }
 
   static navigationOptions = {
@@ -21,19 +22,46 @@ export default class ControllerScreen extends Component {
     header: null
   };
 
+  switchCallback = (value) => {
+    let pos = parseInt(value.charAt(0))
+    let val = value.charAt(1)
+    console.log("updating switchvals ("+this.switchVals+")"+ " at position: " + pos + " " + "to: " + val)
+
+    let pre = this.switchVals.slice(0, pos)
+    let post = this.switchVals.slice(pos+1)
+
+    console.log("updating pre+val+post: " + pre+val+post)
+    //this.setState({SwitchVals: pre+val+post})
+    this.switchVals = pre+val+post
+    store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, pre+val+post));
+  }
+
   waveformCallback = (value) => {
     store.dispatch(Update_Value(ACTIONS.UPDATE_WAVEFORM, value));
     this.setState({Waveform: value});
+
+    if (value===WAVE_FORMS.VTF || value===WAVE_FORMS.PEA){
+      store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, '0000'));
+      this.switchVals = '0000'
+    } else if (value===WAVE_FORMS.NSR){
+      store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, '1111'));
+      this.switchVals = '1111'
+    }
   }
 
   _compressionsChange() {
     if(this.state.Waveform === "Compressions In-Progress"){
       this.setState({Waveform: WAVE_FORMS.NSR})
       store.dispatch(Update_Value(ACTIONS.UPDATE_WAVEFORM, WAVE_FORMS.NSR));
+      store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, '1111'));
+      this.switchVals = '1111'
     } else {
       this.setState({Waveform: WAVE_FORMS.CIP});
       store.dispatch(Update_Value(ACTIONS.UPDATE_WAVEFORM, WAVE_FORMS.CIP));
+      store.dispatch(Update_Value(ACTIONS.UPDATE_SWITCHVALS, '0000'));
+      this.switchVals = '0000'
     }
+
   }
 
   _renderCompressionsInProgress(){
@@ -55,6 +83,7 @@ export default class ControllerScreen extends Component {
   }
 
   render() {
+    console.log('RENDER CONTROLLERSCREEN')
     return (
       <View style={styles.container}>
         <View>
@@ -65,6 +94,8 @@ export default class ControllerScreen extends Component {
             min={20} 
             max={300} 
             initialValue={this.state.HeartRate}
+            switchVal={this.state.SwitchVals.charAt(0)}
+            switchCallback={this.switchCallback}
             waveform={this.state.Waveform}
             waveformCallback={this.waveformCallback}
             sliderName="Heart Rate (BPM):"
@@ -75,6 +106,8 @@ export default class ControllerScreen extends Component {
             min={60}
             max={100}
             initialValue={this.state.O2Sat}
+            switchVal={this.state.SwitchVals.charAt(1)}
+            switchCallback={this.switchCallback}
             waveform={this.state.Waveform}
             sliderName="O2 Saturation %:"
             actionType={ACTIONS.UPDATE_O2SAT}
@@ -84,6 +117,8 @@ export default class ControllerScreen extends Component {
             min={0}
             max={15}
             initialValue={BLOOD_PRESSURE_LEVELS.indexOf(this.state.bloodPressure)}
+            switchVal={this.state.SwitchVals.charAt(2)}
+            switchCallback={this.switchCallback}
             waveform={this.state.Waveform}
             sliderName="Blood Pressure:"
             actionType={ACTIONS.UPDATE_BLOOD_PRESSURE}
@@ -94,6 +129,8 @@ export default class ControllerScreen extends Component {
             min={0}
             max={50}
             initialValue={this.state.EtC02}
+            switchVal={this.state.SwitchVals.charAt(3)}
+            switchCallback={this.switchCallback}
             waveform={this.state.Waveform}
             sliderName="EtCO2 (mmHg):"
             actionType={ACTIONS.UPDATE_ETCO2}
