@@ -1,0 +1,66 @@
+<html>
+	<header><meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0"></header>
+	<head><style>* {margin:0; padding:0;}</style></head>
+	<body style="background-color:black">
+		<canvas id="curve_window"></canvas>
+	</body>
+</html>
+
+<script src="https://unpkg.com/tone"></script>
+
+<script>
+	//create a synth and connect it to the master output (your speakers)
+	var synth = new Tone.Synth().toMaster()
+
+	//play a middle 'C' for the duration of an 8th note
+	//synth.triggerAttackRelease('C4', '8n')
+	synth.envelope.attack = 0.005;
+	synth.envelope.decay = 0.005;
+	synth.envelope.sustain = 0.15;
+	synth.envelope.release = 0.05;
+
+	function beep(pitch) {
+		//synth.triggerAttackRelease(Tone.Frequency('D5').transpose(transp), '0.15')
+		synth.triggerAttackRelease(pitch, '0.15')
+	}
+</script>
+
+<script>
+	var c = document.getElementById("curve_window")
+	var ctx = c.getContext("2d",{alpha: false});
+
+	function init(w,h,col) {
+		c.width = w
+		c.height = h
+
+		ctx.strokeStyle = col
+		ctx.fillStyle = col
+
+		//ctx.translate(0.5, 0.5);
+		ctx.lineWidth = 1;
+		//ctx.setLineDash([1,0]);
+		  
+		//ctx.beginPath();
+		//ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+		//ctx.stroke();
+	}
+
+	function first_point(x,y){
+		ctx.moveTo(x, y);
+        ctx.fillRect(x, y, 1, 1);
+	}
+
+	function draw_line(x,y){
+		ctx.lineTo(x, y);
+        ctx.stroke();
+	}
+
+	function trace(x,w){
+		ctx.clearRect(x, 0, w, c.height);
+	}
+
+	function reset(){
+		ctx.beginPath();
+	}
+
+</script>

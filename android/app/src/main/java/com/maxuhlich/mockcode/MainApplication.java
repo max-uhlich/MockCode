@@ -1,4 +1,4 @@
-package com.mockcode;
+package com.maxuhlich.mockcode;
 
 import android.app.Application;
 

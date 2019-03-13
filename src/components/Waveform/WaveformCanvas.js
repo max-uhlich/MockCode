@@ -304,8 +304,8 @@ class WaveformCanvas extends React.Component {
         <View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout} > 
           <WebView
             ref={this.handleWebView}
-            source={require('./tone_synth.html')}
-            //source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
+            //source={require('./tone_synth.html')}
+            source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             injectedJavaScript={'init(\''+this.state.dimensions.width+'\',\''+this.state.dimensions.height+'\',\''+this.props.colour+'\');'}

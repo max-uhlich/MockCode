@@ -98,7 +98,7 @@ android {
     buildToolsVersion "27.0.3"
 
     defaultConfig {
-        applicationId "com.mockcode"
+        applicationId "com.maxuhlich.mockcode"
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 3
