@@ -15,6 +15,7 @@ import styles from "./styles/selectModeScreenStyle";
 import {scale, moderateScale} from "../utils/scaling"
 import { NetworkComp } from '../components/network';
 import {connect} from 'react-redux';
+import Orientation from "react-native-orientation";
 
 class SelectModeScreen extends Component {
   // componentWillMount(){
@@ -34,6 +35,11 @@ class SelectModeScreen extends Component {
   componentDidMount(){
     StatusBar.setHidden(false);
     YellowBox.ignoreWarnings(['Setting a timer']);
+    Orientation.lockToPortrait();
+  }
+
+  componentWillUnmount() {
+    Orientation.unlockAllOrientations();
   }
 
   static navigationOptions = {

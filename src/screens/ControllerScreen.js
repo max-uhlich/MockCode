@@ -8,6 +8,7 @@ import {Update_Value, ACTIONS} from '../redux/actions/nearbyActions'
 import FaceButtonList from '../components/FaceButtonList';
 import { moderateScale } from "../utils/scaling";
 import {BLOOD_PRESSURE_LEVELS, WAVE_FORMS} from '../utils/constants';
+import Orientation from "react-native-orientation";
 
 export default class ControllerScreen extends Component {
   constructor() {
@@ -21,6 +22,15 @@ export default class ControllerScreen extends Component {
     title: "Controller",
     header: null
   };
+
+  componentDidMount(){
+    Orientation.lockToLandscape();
+  }
+
+  componentWillUnmount() {
+    Orientation.lockToPortrait();
+    //Orientation.unlockAllOrientations();
+  }
 
   switchCallback = (value) => {
     let pos = parseInt(value.charAt(0))
