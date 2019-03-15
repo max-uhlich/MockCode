@@ -22,7 +22,7 @@ class MonitorScreen extends React.Component {
 
     componentDidMount(){
         StatusBar.setHidden(true);
-        Orientation.lockToLandscape();
+        //Orientation.lockToLandscape();
     }
 
     componentWillUnmount() {
@@ -55,6 +55,7 @@ class MonitorScreen extends React.Component {
     }
 
     render() {
+        console.log('rendering monitorscreen')
         let CurrentMonitor = MONITOR_PRESETS[this.state.currentPreset];
         //console.log("BLOOD PRESSURE: " + this.props.bloodPressure);
         return (

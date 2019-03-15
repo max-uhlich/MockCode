@@ -7,6 +7,7 @@ import WaveformCanvas from '../Waveform/WaveformCanvas';
 
 export default class PhilipsMonitor extends React.PureComponent{
     render() {
+        console.log("rendering philipsmonitor")
         var HR = (this.props.SwitchVals.charAt(0)==='1') ? this.props.heartRate : '---';
         var O2 = (this.props.SwitchVals.charAt(1)==='1') ? this.props.O2Sat : '---';
         var BP = (this.props.SwitchVals.charAt(2)==='1') ? this.props.bloodPressure : '---';

@@ -66,10 +66,10 @@ class SelectModeScreen extends Component {
               </Row>
               <Row size={2}>
                 <Col style={{justifyContent: 'space-around'}}>
-                  <Button bordered style={styles.screenNavButton} block onPress={() => navigate('ControllerScreen')}>
+                  <Button bordered style={styles.screenNavButton} block onPress={() => {Orientation.lockToLandscape(); navigate('ControllerScreen')}}>
                     <Text> Controller </Text>
                   </Button>
-                  <Button bordered style={styles.screenNavButton} block onPress={() => navigate('MonitorScreen')}>
+                  <Button bordered style={styles.screenNavButton} block onPress={() => {Orientation.lockToLandscape(); navigate('MonitorScreen')}}>
                     <Text> Monitor </Text>
                   </Button>
                   <Button bordered style={styles.screenNavButton} block onPress={() => navigate('PatientScreen')}>

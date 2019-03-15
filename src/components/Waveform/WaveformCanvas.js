@@ -264,8 +264,8 @@ class WaveformCanvas extends React.Component {
     }
     this.setState({ dimensions: { width:width, height:height } })
 
-    //console.log("width: " + width)
-    //console.log("height: " + height)
+    console.log("width: " + width)
+    console.log("height: " + height)
     this.threshold = Math.round(0.48913*height)
     //console.log("threshold: " + this.threshold)
     

@@ -24,7 +24,7 @@ export default class ControllerScreen extends Component {
   };
 
   componentDidMount(){
-    Orientation.lockToLandscape();
+    //Orientation.lockToLandscape();
   }
 
   componentWillUnmount() {

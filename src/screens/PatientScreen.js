@@ -10,7 +10,7 @@ import {
 import Video from 'react-native-video';
 import { connect, Provider } from "react-redux";
 import { NearbyAPI } from "react-native-nearby-api";
-import Orientation from "react-native-orientation";
+//import Orientation from "react-native-orientation";
 
 import PropTypes from 'prop-types';
 
@@ -38,11 +38,11 @@ class PatientScreen extends Component {
   }
 
   componentDidMount(){
-    Orientation.lockToPortrait();
+    //Orientation.lockToPortrait();
   }
 
   componentWillUnmount() {
-    Orientation.lockToPortrait();
+    //Orientation.lockToPortrait();
     //Orientation.unlockAllOrientations();
   }
 
