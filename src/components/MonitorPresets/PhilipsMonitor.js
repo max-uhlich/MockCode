@@ -11,6 +11,7 @@ export default class PhilipsMonitor extends React.PureComponent{
         var HR = (this.props.SwitchVals.charAt(0)==='1') ? this.props.heartRate : '---';
         var O2 = (this.props.SwitchVals.charAt(1)==='1') ? this.props.O2Sat : '---';
         var BP = (this.props.SwitchVals.charAt(2)==='1') ? this.props.bloodPressure : '---';
+        var ET = (this.props.SwitchVals.charAt(3)==='1') ? this.props.EtC02 : '---';
         return (
             <View style={styles.container}>
                 {/* This view contains the column where any waveforms are drawn
@@ -66,7 +67,7 @@ export default class PhilipsMonitor extends React.PureComponent{
                         />
                     </View>
                     <View style={styles.nbpInfoExtra}>
-                        <Text style={bpInfoStyle.nbpInfoExtraText}>{BP}</Text>
+                        <Text style={bpInfoStyle.nbpInfoExtraText}>{ET}</Text>
                     </View>
                 </View>
                 {/* View to contain the right side of monitor, where the pulse of
@@ -94,6 +95,7 @@ PhilipsMonitor.propTypes = {
     heartRate: PropTypes.number.isRequired,
     bloodPressure: PropTypes.string.isRequired,
     O2Sat: PropTypes.number.isRequired,
+    EtC02: PropTypes.number.isRequired,
     SwitchVals: PropTypes.string.isRequired
 }
 
@@ -125,7 +127,7 @@ const bpInfoStyle = StyleSheet.create({
         fontWeight: 'bold',
     },
     nbpInfoExtraText: {
-        fontSize: moderateScale(25),
+        fontSize: moderateScale(30),
         color: '#ffe6f3'
     }
 })
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
     nbpInfoExtra: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         backgroundColor: 'black'
     },
 })

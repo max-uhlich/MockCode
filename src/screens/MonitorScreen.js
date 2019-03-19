@@ -68,6 +68,7 @@ class MonitorScreen extends React.Component {
                     heartRate = {this.props.heartRate}
                     bloodPressure = {this.props.bloodPressure}
                     O2Sat = {this.props.O2Sat}
+                    EtC02 = {this.props.EtC02}
                     SwitchVals = {this.props.SwitchVals}/>
                 <PresetChangerArrow
                     show={this.state.toggle}
@@ -93,6 +94,7 @@ const mapStateToProps = (state) => {
         heartRate: state.HeartRate,
         bloodPressure: state.bloodPressure,
         O2Sat: state.O2Sat,
+        EtC02: state.EtC02,
         Waveform: state.Waveform,
         SwitchVals: state.SwitchVals
     }
