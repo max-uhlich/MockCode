@@ -38,7 +38,7 @@ export default class PhilipsMonitor extends React.PureComponent{
                             </View> */}
                             <Text style={bpInfoStyle.nbpValueLarge}>{BP}</Text>
                         </View>
-                        <View style={{flex : 1.5, alignItems: 'center'}}>
+                        <View style={{flex : 1, alignItems: 'flex-end'}}>
                             <Text style={bpInfoStyle.nbpRightText}>NBP</Text>
                             <Text style={bpInfoStyle.mmHgText}>mmHg</Text>
                         </View>
@@ -72,7 +72,7 @@ export default class PhilipsMonitor extends React.PureComponent{
                 {/* View to contain the right side of monitor, where the pulse of
                     patient is shown as determined by the O2Sat. */}
                 <View style={styles.pulseSection}>
-                    <View style={{flex: 1.4, backgroundColor: 'black', justifyContent: 'center'}}>
+                    <View style={{flex: 1, backgroundColor: 'black', justifyContent: 'center'}}>
                         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                             <View style={{flexDirection: 'column', margin: '5%'}}>
                                 <Text style={pulseStyle.pulseText}>Pulse</Text>
@@ -120,9 +120,9 @@ const bpInfoStyle = StyleSheet.create({
         color :'#8A2BE2'
     },
     nbpValueLarge: {
-        fontSize: moderateScale(80),
+        fontSize: moderateScale(70),
         color: '#ffe6f3',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     nbpInfoExtraText: {
         fontSize: moderateScale(25),
@@ -132,14 +132,14 @@ const bpInfoStyle = StyleSheet.create({
 
 const pulseStyle = StyleSheet.create({
     squareGraphic: {
-        width: moderateScale(35),
-        height: moderateScale(35),
-        borderRadius: 5,
+        width: moderateScale(30),
+        height: moderateScale(30),
+        borderRadius: moderateScale(5),
         backgroundColor: 'white'
     },
     pulseText: {
         color: 'white',
-        fontSize: moderateScale(18)
+        fontSize: moderateScale(13)
     },
     pulseValue: {
         fontSize: moderateScale(60),
@@ -154,19 +154,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     waveformSection: {
-        flex: 3.5,
+        flex: 3.7,
         flexDirection: 'column',
         backgroundColor: 'black'
     },
     dataSection: {
-        flex: 1,
+        flex: 1.4,
         flexDirection: 'column',
         height: '100%',
         width: '100%',
         backgroundColor: 'black'
     },
     pulseSection: {
-        flex: 1.5,
+        flex: 1.2,
         flexDirection: 'column',
     },
     heartRateWave: {

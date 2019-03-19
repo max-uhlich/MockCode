@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, Switch} from 'react-native';
+import {set_W_H, scale, moderateScale} from "../../utils/scaling"
 
 export default class PeerListElement extends React.PureComponent {
     
@@ -63,8 +64,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     connectionName: {
+        fontSize: moderateScale(20),
         flex: 0.7,
-        fontSize: 25
     },
     connectionType: {
         flex: 0.3,

@@ -47,6 +47,7 @@ class WaveformCanvas extends React.Component {
     //this.r.changeWaveform('HR', 'NSR');
     //this.r.updateFrequency(120);
     //this.frame = this.r.getFrame(0, 100);
+    this.layoutBool = false
   }
 
   componentDidMount() {
@@ -257,7 +258,39 @@ class WaveformCanvas extends React.Component {
   }
 
   onLayout = event => {
-    //console.log('onLayout')
+
+    console.log('onLayout')
+    console.log("layout width: " + event.nativeEvent.layout.width)
+    console.log("layout height: " + event.nativeEvent.layout.height)
+    if (this.layoutBool) {
+      console.log('returning now')
+      return // layout was already called
+    }
+    this.layoutBool = true;
+
+    this.viewRef.measure((x, y, width, height) => {
+      console.log("measure width: " + width)
+      console.log("measureheight: " + height)
+
+      this.threshold = Math.round(0.48913*height)
+      this.spw = (width/this.stepsize)/this.fps;
+
+      this.setState({ dimensions: { width:width, height:height } })
+    })
+
+    //let { width, height } = event.nativeEvent.layout
+    //console.log("layout width: " + event.nativeEvent.layout.width)
+    //console.log("layout height: " + event.nativeEvent.layout.height)
+
+    return
+
+
+
+
+
+
+
+    console.log('onLayout')
     let { width, height } = event.nativeEvent.layout
     if (this.state.dimensions) {
       if (width == this.state.dimensions.width && height == this.state.dimensions.height) return;
@@ -285,6 +318,12 @@ class WaveformCanvas extends React.Component {
     var bps = this.heartrate/60                     //beats per second
     var bpw = this.spw*bps                                      //beats per window
     //console.log("bpw: " + bpw + " " + Math.round(bpw))
+    
+    //this.measure();
+    //this.view.measure((x, y, width, height) => {
+    //  console.log("measure width: " + width)
+    //  console.log("measureheight: " + height)
+    //})
   }
 
 //ref={(c) => {this.canvasRef = c; this.canvasRef.height = this.state.dimensions.height;}} />
@@ -299,9 +338,10 @@ class WaveformCanvas extends React.Component {
     //console.log("this.heartrate: " + this.heartrate)
     this.pitch = this.pitches[s.O2Sat % 60]
     if (this.state.dimensions) {
+      console.log("dimensions true")
       //console.log("this.state.dimensions: " + this.state.dimensions.height + " " + this.state.dimensions.width)
       return (
-        <View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout} > 
+        <View style={{ flex: 1, alignSelf: 'stretch' }} > 
           <WebView
             ref={this.handleWebView}
             //source={require('./tone_synth.html')}
@@ -314,7 +354,8 @@ class WaveformCanvas extends React.Component {
           </View>
       );
     } else {
-      return (<View style={{ flex: 1, alignSelf: 'stretch' }} onLayout={this.onLayout}/>);
+      console.log("dimensions false")
+      return (<View style={{ flex: 1, alignSelf: 'stretch' }} ref={ref => this.viewRef = ref} onLayout={this.onLayout}/>);
 
     }
   }
