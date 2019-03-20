@@ -16,7 +16,7 @@ export default class VitalInfo extends React.PureComponent {
                 </View>
             </View>
             <View style={styles.vitalRate}>
-                <Text style={[{fontSize: moderateScale(90), fontWeight: 'bold', marginTop: '-15%'}, this.props.style]}>{this.props.vitalRate}</Text>
+                <Text style={[{fontSize: moderateScale(90), fontWeight: 'bold', marginTop: '-10%'}, this.props.style]}>{this.props.vitalRate}</Text>
             </View>
         </View>
         );
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     vitalSignName: {
-        flex: 1,
+        flex: 0.8,
         flexDirection: 'row'
     },
     vitalRate: {
@@ -37,6 +37,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         backgroundColor: 'black',
-        zIndex: 0
     }
 })
