@@ -20,9 +20,6 @@ export default class PhilipsMonitor extends React.PureComponent{
                     <View style={styles.heartRateWave}>
                         {<WaveformCanvas wavetype="HR" colour="green" fps={30} stepsize={4} f={this.props.heartRate}/>}
                     </View>
-                    <View style={styles.oSatWave}>
-                        {/*<WaveformCanvas wavetype="O2Sat" colour="#15f4ee" fps={30} stepsize={4} f={this.props.heartRate}/>*/}
-                    </View>
                     <View style={styles.nbpInfo}>
                         <View style={{flex: 0.8}}>
                             <Text style={bpInfoStyle.nbpLeftText}>NBP</Text>
@@ -172,7 +169,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     heartRateWave: {
-        flex: 1,
+        flex: 2,
         flexDirection: 'row'
     },
     heartRateData: {

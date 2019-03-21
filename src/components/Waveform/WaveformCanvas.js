@@ -77,8 +77,8 @@ class WaveformCanvas extends React.Component {
       this.canvasRef.height = this.state.dimensions.height;
       this.canvasRef.width = this.state.dimensions.width;
       this.ctx = this.canvasRef.getContext('2d');
-      this.ctx.strokeStyle = this.props.colour;
-      this.ctx.fillStyle = this.props.colour;
+      //this.ctx.strokeStyle = this.props.colour;
+      //this.ctx.fillStyle = this.props.colour;
     }
   }
 
@@ -103,92 +103,68 @@ class WaveformCanvas extends React.Component {
   }
 
   _waveform(x) {
-    //console.log('_waveform ' + x)
-    //var w = waveformData.HR.NSR;
-    //var p = w.dataPoints[x % w.nPoints];
-    //var scaled =  (w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height
-    //return scaled.toFixed();
+    switch (this.waveform) {
+      case "Normal Sinus Rhythm":
+        var w = waveformData.HR.NSR;
+        //c = Math.floor(this.state.dimensions.width / (5000 * (store.getState().HeartRate / 60000)));
+        
+        var bps = this.heartrate/60                     //beats per second
+        var bpw = this.spw*bps                                      //beats per window
+        var ppb = this.state.dimensions.width/bpw                   //pixels per beat
+        //var fpb = (this.state.dimensions.width/this.stepsize)/bpw   //frames per beat
+        //console.log("bps " + bps)
+        //console.log("bpw " + bpw)
+        //console.log("ppb " + ppb)
+        //console.log("fpb " + fpb)
 
-    //var s = store.getState();
-    switch (this.props.wavetype) {
-      case "HR":
-        switch (this.waveform) {
-          case "Normal Sinus Rhythm":
-            var w = waveformData.HR.NSR;
-            //c = Math.floor(this.state.dimensions.width / (5000 * (store.getState().HeartRate / 60000)));
-            
-            var bps = this.heartrate/60                     //beats per second
-            var bpw = this.spw*bps                                      //beats per window
-            var ppb = this.state.dimensions.width/bpw                   //pixels per beat
-            //var fpb = (this.state.dimensions.width/this.stepsize)/bpw   //frames per beat
-            //console.log("bps " + bps)
-            //console.log("bpw " + bpw)
-            //console.log("ppb " + ppb)
-            //console.log("fpb " + fpb)
+        cadence = Math.round(ppb);
+        //cadence = Math.min(c, w.nPoints);
+        break
 
-            cadence = Math.round(ppb);
-            //cadence = Math.min(c, w.nPoints);
-            break
-
-          case "Ventricular Tachycardia":
-            var w = waveformData.HR.VT
-            cadence = w.nPoints
-            break;
-          case "Ventricular Fibrillation":
-            var w = waveformData.HR.VF
-            cadence = w.nPoints
-            break;
-          case "PEA/Asystole":
-            var w = waveformData.HR.PEA
-            cadence = w.nPoints
-            break;
-          case "Compressions In-Progress":
-            var w = waveformData.HR.ASYSTOLE;
-            cadence = w.nPoints;
-        }
-        // Cadence can never go below 28, otherwise we fail to render heart beats.
-        cadence = Math.max(cadence,28)
-        //console.log("cadence: " + cadence)
-
-        // If cadence is really high, we will add noise to the end
-        var xPos = (x % cadence) + Math.floor(Math.random()*2)
-        if (xPos>w.nPoints)
-          var p = waveformData.NOISE.NORMAL.dataPoints[xPos % waveformData.NOISE.NORMAL.nPoints]
-        else
-          var p = w.dataPoints[xPos];
-
-        var scaled =  ((w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height).toFixed();
-
-        // Beep if necessary
-        if ((scaled < this.threshold) && ((x - this.beeptime)>(3*this.stepsize))){
-          this.beeptime = x;
-          //this.webviewRef.injectJavaScript('beep(\'D5\')');
-          this.webviewRef.injectJavaScript('beep(\'' + this.pitch + '\')');
-        }
-        //console.log(scaled)
-        //(s.O2Sat-96)
-        return scaled;
+      case "Ventricular Tachycardia":
+        var w = waveformData.HR.VT
+        cadence = w.nPoints
         break;
-
-      case "BP":
-        if (this.waveform == "Compressions In-Progress") {
-          return this.state.dimensions.height /2;
-        } else {
-          return x % 200;
-        }
+      case "Ventricular Fibrillation":
+        var w = waveformData.HR.VF
+        cadence = w.nPoints
         break;
-      case "O2Sat":
-        var w = waveformData.O2Sat.NORMAL2;
-        var p = w.dataPoints[x % w.nPoints] - 1;
-        var scaled =  ((w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height)/2
-        return scaled.toFixed();
-
-        scaled = this.state.dimensions.height - this.state.dimensions.height * (s.O2Sat / 100) + 10
-        return scaled;
+      case "PEA/Asystole":
+        var w = waveformData.HR.PEA
+        cadence = w.nPoints
         break;
-      default:
-        return 100;
+      case "Compressions In-Progress":
+        var w = waveformData.HR.ASYSTOLE;
+        cadence = w.nPoints;
     }
+    // Cadence can never go below 28, otherwise we fail to render heart beats.
+    cadence = Math.max(cadence,28)
+
+    // If cadence is really high, we will add noise to the end
+    var xPos = ((x + Math.floor(Math.random()*2)) % cadence) //+ Math.floor(Math.random()*2)
+    if (xPos>=w.nPoints)
+      var p = waveformData.NOISE.NORMAL.dataPoints[xPos % waveformData.NOISE.NORMAL.nPoints]
+    else
+      var p = w.dataPoints[xPos];
+
+    var scaled =  ((w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height/2).toFixed();
+
+    // Beep if necessary
+    if ((scaled < this.threshold) && ((x - this.beeptime)>(3*this.stepsize))){
+      this.beeptime = x;
+      //this.webviewRef.injectJavaScript('beep(\'D5\')');
+      this.webviewRef.injectJavaScript('beep(\'' + this.pitch + '\')');
+    }
+    //console.log(scaled)
+    //(s.O2Sat-96)
+    return scaled;
+  }
+
+  O2SatCurve(x) {
+    var w = waveformData.O2Sat.NORMAL3;
+    var p = w.dataPoints[x % w.nPoints] - 1;
+    var scaled =  (((w.range.max -  p) / (w.range.max - w.range.min) * this.state.dimensions.height)/4)+(this.state.dimensions.height/2)
+    return scaled.toFixed();
   }
 
   config(w, h, bpm) {
@@ -199,53 +175,75 @@ class WaveformCanvas extends React.Component {
   renderFrame() {
     now = Date.now();
     delta = now - this.then;
-    //console.log("renderFrame")
 
     if (delta > this.interval) {
-    //if (true) {
       this.then = now - (delta % this.interval);
 
       if (this.state.dimensions){
 
         this.y = this._waveform(this.arrIndex);
-        //var newPoint = this.x + "," + this.y + " "
-        //this.path += newPoint
-
-        //console.log("newPoint: " + newPoint)
+        this.y2 = this.O2SatCurve(this.arrIndex);
 
         // Draw a particular line segment of our curve.
         if(this.x===0){
-          //this.wintimer = new Date()
-          //this.webviewRef.injectJavaScript('first_point(\''+this.x+'\',\''+this.y+'\')');
-          this.ctx.moveTo(this.x, this.y);
+          this.ctx.fillStyle = 'green';
           this.ctx.fillRect(this.x, this.y, 1, 1);
+
+          this.ctx.fillStyle = '#15f4ee';
+          this.ctx.fillRect(this.x, this.y2, 1, 1);
+
+          this.prev_x = this.x
+          this.prev_y = this.y
+          this.prev_y2 = this.y2
+
+          this.ctx.beginPath();
+          this.ctx.moveTo(this.prev_x, this.prev_y);
+          this.ctx.strokeStyle = 'green';
+          this.swap = true;
         } else {
-          //this.webviewRef.injectJavaScript('draw_line(\''+this.x+'\',\''+this.y+'\')');
-          this.ctx.lineTo(this.x, this.y);
-          this.ctx.stroke();
+
+          if (this.swap){
+            this.ctx.lineTo(this.x, this.y);
+            this.ctx.stroke();
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.prev_x, this.prev_y2);
+            this.ctx.strokeStyle = '#15f4ee';
+            this.ctx.lineTo(this.x, this.y2);
+            this.ctx.stroke();
+            this.swap = false;
+
+          } else {
+
+            this.ctx.lineTo(this.x, this.y2);
+            this.ctx.stroke();
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.prev_x, this.prev_y);
+            this.ctx.strokeStyle = 'green';
+            this.ctx.lineTo(this.x, this.y);
+            this.ctx.stroke();
+            this.swap = true;
+
+          }
+
+          this.prev_x = this.x
+          this.prev_y = this.y
+          this.prev_y2 = this.y2
         }
 
         // Draw the trace.
-        //this.webviewRef.injectJavaScript('trace(\''+(this.x+1)+'\',\''+this.traceWidth+'\')');
         this.ctx.clearRect(this.x+1, 0, this.traceWidth, this.state.dimensions.height);
         var overage = (this.x+1) + (this.traceWidth-1) - this.state.dimensions.width;
-        //console.log("overage: " + overage)
         if (overage > 0){
-          //this.webviewRef.injectJavaScript('trace(\''+0+'\',\''+overage+'\')');
           this.ctx.clearRect(0, 0, overage, this.state.dimensions.height);
         }
         
         this.x = (this.x % (this.state.dimensions.width+1)) + this.stepsize
 
         if(this.x >= (this.state.dimensions.width+1)){
-          //console.log("path: " + this.path)
-          //this.webviewRef.injectJavaScript('reset()');
-          this.ctx.beginPath();
-          //this.path = ""
+          //this.ctx.beginPath();
           this.x = 0
-          //this.wintimer2 = new Date()
-          //this.spw = (this.spw + ((this.wintimer2.getTime() - this.wintimer.getTime())/1000))/2
-          //console.log("this.spw: " + this.spw)
         }
 
         if(this.x <= this.state.dimensions.width){
@@ -272,8 +270,10 @@ class WaveformCanvas extends React.Component {
       console.log("measure width: " + width)
       console.log("measureheight: " + height)
 
-      this.threshold = Math.round(0.48913*height)
+      this.threshold = Math.round(0.48913*height/2)
+      console.log("this.threshold: " + this.threshold)
       this.spw = (width/this.stepsize)/this.fps;
+      console.log("this.spw: " + this.spw)
 
       this.setState({ dimensions: { width:width, height:height } })
     })
