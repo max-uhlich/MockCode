@@ -9,9 +9,9 @@ const initialState = {
 
 function NearbyApi(state = initialState, action) {
   //console.log("In reducer NearbyApi")
-  state.devices.add('Test 1*f139d13*52d')
-  state.devices.add('Test Device*xxc9ef')
-  state.devices.add('Testing Device*1zz1c')
+  //state.devices.add('Test 1*f139d13*52d')
+  //state.devices.add('Test Device*xxc9ef')
+  //state.devices.add('Testing Device*1zz1c')
   //const iterator1 = state.devices.entries();
 
   //for (let entry of iterator1) {

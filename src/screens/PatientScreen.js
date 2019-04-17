@@ -15,15 +15,15 @@ import { NearbyAPI } from "react-native-nearby-api";
 import PropTypes from 'prop-types';
 
 const faces = {
-  normal: require('../components/vid/normal.mp4'),
-  dead: require('../components/vid/dead.mp4'),
-  discomfort: require('../components/vid/discomfort.mp4'),
+  normal: require('../components/vid/Portrait1a2.mp4'),
+  dead: require('../components/vid/Portrait1b1.mp4'),
+  discomfort: require('../components/vid/Portrait3b2.mp4'),
 };
 
 export const faceNames = {
-  normal: 'Normal',
-  dead: 'Dead',
-  discomfort: 'Discomfort',
+  normal: 'Portrait-1a2',
+  dead: 'Portrait-1b1',
+  discomfort: 'Portrait-3b2',
 };
 
 class PatientScreen extends Component {
@@ -85,7 +85,7 @@ class PatientScreen extends Component {
           paused={false}
           resizeMode='stretch'
           style={styles.video}
-          muted={true}
+          muted={false}
         />
         {this._renderBack()}
       </TouchableOpacity>
