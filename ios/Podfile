@@ -8,9 +8,9 @@ target 'MockCode' do
   # Pods for MockCode
   platform :ios, '9.0'
 
-  pod 'AppCenter/Crashes', '~> 1.5.0'
-  pod 'AppCenter/Analytics', '~> 1.5.0'
-  pod 'AppCenterReactNativeShared', '~> 1.4.0'
+  pod 'AppCenter/Crashes', '~> 1.8.0'
+  pod 'AppCenter/Analytics', '~> 1.8.0'
+  pod 'AppCenterReactNativeShared', '~> 1.7.1'
  
   pod 'NearbyMessages'
 
@@ -23,6 +23,31 @@ target 'MockCode' do
   # pod 'react-native-video', :path => '../node_modules/react-native-video'
 
   # pod 'react-native-webgl', :path => '../node_modules/react-native-webgl'
+
+
+
+
+
+
+
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+
+
+
+
+
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+        'Core',
+        'CxxBridge',
+        'DevSupport',
+        'RCTNetwork'
+        ]
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
   # target 'example' do
   

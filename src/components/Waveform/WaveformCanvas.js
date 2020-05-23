@@ -4,6 +4,8 @@ import Canvas from 'react-native-canvas';
 
 import { waveformData } from './WaveformData.js';
 
+const webviewSource = require('./tone_synth.html');
+
 //import Renderer from './WaveformRenderer'
 //r = new Renderer('HR');
 
@@ -344,8 +346,10 @@ class WaveformCanvas extends React.Component {
         <View style={{ flex: 1, alignSelf: 'stretch' }} > 
           <WebView
             ref={this.handleWebView}
+            source={webviewSource}
+            originWhitelist={['*']}
             //source={require('./tone_synth.html')}
-            source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
+            //source={Platform.OS === 'ios' ? require('./tone_synth.html') : {uri: "file:///android_asset/tone_synth.html"}}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             injectedJavaScript={'init(\''+this.state.dimensions.width+'\',\''+this.state.dimensions.height+'\',\''+this.props.colour+'\');'}

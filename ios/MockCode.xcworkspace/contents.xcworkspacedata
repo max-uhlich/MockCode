@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:MockCode.xcodeproj">
+      location = "group:/Users/noelcorser/React_Native/MockCode/ios/MockCode.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:MockCode.xcodeproj">
    </FileRef>
 </Workspace>

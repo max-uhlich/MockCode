@@ -3,6 +3,7 @@ package com.maxuhlich.mockcode;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.horcrux.svg.SvgPackage;
 import com.github.yamill.orientation.OrientationPackage;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNCWebViewPackage(),
             new ReactVideoPackage(),
             new SvgPackage(),
             new RNDeviceInfo(),

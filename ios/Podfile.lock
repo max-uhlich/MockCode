@@ -1,11 +1,18 @@
 PODS:
-  - AppCenter/Analytics (1.5.0):
+  - AppCenter/Analytics (1.8.0):
     - AppCenter/Core
-  - AppCenter/Core (1.5.0)
-  - AppCenter/Crashes (1.5.0):
+  - AppCenter/Core (1.8.0)
+  - AppCenter/Crashes (1.8.0):
     - AppCenter/Core
-  - AppCenterReactNativeShared (1.4.0):
-    - AppCenter/Core (= 1.5.0)
+  - AppCenterReactNativeShared (1.7.1):
+    - AppCenter/Core (= 1.8.0)
+  - boost-for-react-native (1.63.0)
+  - DoubleConversion (1.1.5)
+  - Folly (2016.10.31.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.4)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
   - GoogleNetworkingUtilities (1.2.2):
@@ -18,22 +25,96 @@ PODS:
     - GoogleNetworkingUtilities (~> 1.2)
     - GoogleSymbolUtilities (~> 1.1)
     - GoogleUtilities (~> 1.3)
+  - React (0.56.1):
+    - React/Core (= 0.56.1)
+  - react-native-webview (6.0.0):
+    - React
+  - React/Core (0.56.1):
+    - yoga (= 0.56.1.React)
+  - React/CxxBridge (0.56.1):
+    - Folly (= 2016.10.31.00)
+    - React/Core
+    - React/cxxreact
+  - React/cxxreact (0.56.1):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2016.10.31.00)
+    - React/jschelpers
+    - React/jsinspector
+  - React/DevSupport (0.56.1):
+    - React/Core
+    - React/RCTWebSocket
+  - React/fishhook (0.56.1)
+  - React/jschelpers (0.56.1):
+    - Folly (= 2016.10.31.00)
+    - React/PrivateDatabase
+  - React/jsinspector (0.56.1)
+  - React/PrivateDatabase (0.56.1)
+  - React/RCTBlob (0.56.1):
+    - React/Core
+  - React/RCTNetwork (0.56.1):
+    - React/Core
+  - React/RCTWebSocket (0.56.1):
+    - React/Core
+    - React/fishhook
+    - React/RCTBlob
+  - yoga (0.56.1.React)
 
 DEPENDENCIES:
-  - AppCenter/Analytics (~> 1.5.0)
-  - AppCenter/Crashes (~> 1.5.0)
-  - AppCenterReactNativeShared (~> 1.4.0)
+  - AppCenter/Analytics (~> 1.8.0)
+  - AppCenter/Crashes (~> 1.8.0)
+  - AppCenterReactNativeShared (~> 1.7.1)
+  - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+  - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - NearbyMessages
+  - react-native-webview (from `../node_modules/react-native-webview`)
+  - React/Core (from `../node_modules/react-native`)
+  - React/CxxBridge (from `../node_modules/react-native`)
+  - React/DevSupport (from `../node_modules/react-native`)
+  - React/RCTNetwork (from `../node_modules/react-native`)
+  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+
+SPEC REPOS:
+  trunk:
+    - AppCenter
+    - AppCenterReactNativeShared
+    - boost-for-react-native
+    - GoogleInterchangeUtilities
+    - GoogleNetworkingUtilities
+    - GoogleSymbolUtilities
+    - GoogleUtilities
+    - NearbyMessages
+
+EXTERNAL SOURCES:
+  DoubleConversion:
+    :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  Folly:
+    :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
+  glog:
+    :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  React:
+    :path: "../node_modules/react-native"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
+  yoga:
+    :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppCenter: 42c293f0de27e173aacd600a55a49da5317cd40e
-  AppCenterReactNativeShared: 056324303732841fff14f2a71c4a6839831b038b
+  AppCenter: 7e7b42e94b70294d1de3d747f164f0c1668a28e1
+  AppCenterReactNativeShared: 713c4b8da168d517297061d4168f7e2f4d2df9c5
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  DoubleConversion: a9706f16e388b53ff12cca34473428ee29746a26
+  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
+  glog: b3b0330915eccea41c5cc9731a77cf564a9be5ea
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleNetworkingUtilities: 3edd3a8161347494f2da60ea0deddc8a472d94cb
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleUtilities: 8bbc733218aad26306f9d4a253823986110e3358
   NearbyMessages: be3e1c44b563c020246312647f3f1128b603693d
+  React: 5762f784e03a9bad2567eead64c74de9335029e3
+  react-native-webview: d3a17abe7cb50863cdf040ac1df92af9f99e38db
+  yoga: b9ed4d1df8b304449cc4d7f72c268eeaac2bbf85
 
-PODFILE CHECKSUM: ec017d0ddf16e048ab8a321a045bd7a4402ae6a9
+PODFILE CHECKSUM: 1d4b9043d8fb15634c06a3c30646c3cffab502c2
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.8.3
